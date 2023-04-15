@@ -3,8 +3,10 @@ import { Feather } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 import IconText from '../components/IconText';
+import moment, { unix } from 'moment';
 
-const City = () => {
+const City = ({ weatherData }) => {
+  const { name, country, population, timezone, sunrise, sunset } = weatherData;
   const {
     container,
     imageLayout,
@@ -24,13 +26,13 @@ const City = () => {
         source={require('../../assets/city-bg.jpg')}
         style={imageLayout}
       >
-        <Text style={[cityText, cityName]}>London</Text>
-        <Text style={[cityText, cityCountry]}>UK</Text>
+        <Text style={[cityText, cityName]}>{name}</Text>
+        <Text style={[cityText, cityCountry]}>{country}</Text>
         <View style={[populationWrapper, rowLayout]}>
           <IconText
             iconName={'user'}
             iconColor={'red'}
-            bodyText={'8000'}
+            bodyText={`${population} people`}
             bodyTextStyles={populationText}
           />
         </View>
@@ -38,13 +40,19 @@ const City = () => {
           <IconText
             iconName={'sunrise'}
             iconColor={'white'}
-            bodyText={'06:46:58am'}
+            bodyText={moment
+              .unix(sunrise + timezone)
+              .format('h:mm:ss a')
+              .toString()}
             bodyTextStyles={riseSetText}
           />
           <IconText
             iconName={'sunset'}
             iconColor={'white'}
-            bodyText={'06:46:58pm'}
+            bodyText={moment
+              .unix(sunset + timezone)
+              .format('h:mm:ss a')
+              .toString()}
             bodyTextStyles={riseSetText}
           />
         </View>
